@@ -1,5 +1,6 @@
 package proxy;
 
+import net.sf.cglib.core.DebuggingClassWriter;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
@@ -34,6 +35,9 @@ class DebugMethodInterceptor implements MethodInterceptor {
 class CglibProxyFactory {
 
     public static Object getProxy(Class<?> clazz) {
+        System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY,"src\\main\\java\\proxy");
+        DebugMethodInterceptor debugMethodInterceptor = new DebugMethodInterceptor();
+
         // 创建动态代理增强类
         Enhancer enhancer = new Enhancer();
         // 设置类加载器
@@ -41,13 +45,17 @@ class CglibProxyFactory {
         // 设置被代理类
         enhancer.setSuperclass(clazz);
         // 设置方法拦截器
-        enhancer.setCallback(new DebugMethodInterceptor());
+        enhancer.setCallback(debugMethodInterceptor);
         // 创建代理类
         return enhancer.create();
     }
 }
 
 public class cglib {
+
+    public static void other(){
+
+    }
     public static void main(String[] args) {
         AliSmsService aliSmsService = (AliSmsService) CglibProxyFactory.getProxy(AliSmsService.class);
         aliSmsService.send("jhhhhhhhhh");

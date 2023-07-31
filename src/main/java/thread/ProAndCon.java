@@ -5,16 +5,33 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ProAndCon {
+    public static void main(String[] args) {
+
+        ResNormal resNormal = new ResNormal();
+        Producer producer = new Producer(resNormal);
+        Consumer consumer = new Consumer(resNormal);
+        Thread thread1 = new Thread(producer);
+        Thread thread2 = new Thread(consumer);
+        thread1.start();
+        thread2.start();
+
+
+    }
 }
 
 class Producer implements Runnable{
+
     private ResNormal resource;
     Producer(ResNormal resource){
         this.resource=resource;
     }
     public void run(){
         //while(true)
-        resource.set("面包");
+        int i=10;
+        while(i>0){
+            resource.set("面包");
+            i--;
+        }
     }
 }
 
@@ -24,8 +41,12 @@ class Consumer implements Runnable{
         this.resource=resource;
     }
     public void run(){
-        //while(true)
-        resource.get();
+        int i=10;
+        while(i>0){
+            resource.get();
+            i--;
+        }
+
     }
 }
 
@@ -45,7 +66,7 @@ class ResNormal{
             }
         this.name=name+"--"+count;
         count++;
-        System.out.println(Thread.currentThread().getName()+"...生产者..."+this.name);
+        System.out.println(Thread.currentThread().getName()+"...生产者..+ "+this.name);
         flag=true;
         notify();
     }
@@ -59,14 +80,13 @@ class ResNormal{
 
                 e.printStackTrace();
             }
-        System.out.println(Thread.currentThread().getName()+"...消费者..."+this.name);
+        System.out.println(Thread.currentThread().getName()+"...消费者..- "+this.name);
         flag=false;
         notify();
     }
 }
 
 //类似于阻塞队列的源码实现
-
 class ResLock{
     //描述资源类
     private String name;

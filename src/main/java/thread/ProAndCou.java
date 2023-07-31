@@ -52,7 +52,6 @@ class Customer implements Runnable {
             }
         }
     }
-
 }
 class Productor implements Runnable {
 

@@ -22,11 +22,9 @@ public class ThreadPoolExecutorDemo {
                 new ArrayBlockingQueue<>(QUEUE_CAPACITY),
                 new ThreadPoolExecutor.CallerRunsPolicy());
 
-        for (int i = 0; i < 10; i++) {
-            //创建WorkerThread对象（WorkerThread类实现了Runnable 接口）
+        for (int i = 0; i < 10; i++) {            //创建WorkerThread对象（WorkerThread类实现了Runnable 接口）
             MyCallable task = new MyCallable("" + i);
-            //执行Runnable
-            Future<String> submit = executor.submit(task);
+            Future<String> submit = executor.submit(task);            //执行Runnable
         }
         //终止线程池
         executor.shutdown();
